@@ -6,16 +6,18 @@ require('dotenv').config()
 
 const resolvers = {
     Query: {
-        async user(root, { id }, { user }) {
+        async user(root, { id }, {user} ) {
             try {
+            
                 if (!user) throw new Error('You are not authenticated!')
-                return models.User.findOne(id)
+                return models.User.findOne({_id:id})
             } catch (error) {
                 throw new Error(error.message)
             }
         },
-        async allUsers(root, args, { user }) {
+        async allUsers(root, args, {user} ) {
             try {
+                
                 if (!user) throw new Error('You are not authenticated!')
                 return models.User.find()
             } catch (error) {
@@ -29,7 +31,7 @@ const resolvers = {
                 const user = await models.User({
                     username,
                     email,
-                    password: await bcrypt.hash(password, 10)
+                    password: await bcrypt.hash(password, 10)// pre hook
                 })
 
                 await user.save()
